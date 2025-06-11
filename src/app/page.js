@@ -25,9 +25,9 @@ export default function Landing() {
             />
             <div>
               <h2 className="text-2xl font-bold">Welcome to WeFarm!</h2>
-              <p className="my-2">Whether you're a beginner or a seasoned grower, we've got everything you need to make planting easier and more fun.</p>
+              <p className="my-2">Whether you`re a beginner or a seasoned grower, we`ve got everything you need to make planting easier and more fun.</p>
               <p className="my-2">Track your plants, get helpful guides, and grow with a community that loves farming as much as you do.</p>
-              <p className="my-2">Let's make farming simple and rewarding—one plant at a time!</p>
+              <p className="my-2">Let`s make farming simple and rewarding—one plant at a time!</p>
             </div>
           </div>
         </section>

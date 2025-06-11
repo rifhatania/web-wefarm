@@ -404,7 +404,7 @@ export default function TrackPlant() {
                     </div>
                     
                     <div className="mt-6 bg-yellow-50 p-4 rounded-lg">
-                        <h3 className="text-lg font-semibold mb-2">Don't Miss Out!</h3>
+                        <h3 className="text-lg font-semibold mb-2">Don`t Miss Out!</h3>
                         <p>⏳ <b>{plantData.growthDuration || 3} Bulan to Go</b></p>
                         <p>Periksa tanaman Anda secara rutin untuk hasil terbaik.</p>
                     </div>

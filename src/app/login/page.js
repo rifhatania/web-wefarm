@@ -124,7 +124,7 @@ export default function LoginPage() {
               {loading ? "Logging in..." : "Log In"}
             </button>
             <p className="text-sm mt-4">
-              Don't have an account?{" "}
+              Don`t have an account?{" "}
               <Link href="/signup" className="font-bold text-green-800">
                 Register
               </Link>
