@@ -306,7 +306,7 @@ export default function PlantGuideModal({ plantName, onClose }) {
                           </span>
                         </div>
                       </div>
-                      <div className="text-gray-600 text-sm italic">"{exp.experience}"</div>
+                      <div className="text-gray-600 text-sm italic">`{exp.experience}`</div>
                     </div>
                   ))
                 ) : (

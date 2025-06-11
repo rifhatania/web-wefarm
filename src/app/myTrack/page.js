@@ -421,7 +421,7 @@ export default function MyTrackPage() {
                         <div>
                           {plant.experience ? (
                             <div className="bg-gray-50 p-3 rounded-lg">
-                              <p className="text-sm text-gray-700 leading-relaxed">"{plant.experience}"</p>
+                              <p className="text-sm text-gray-700 leading-relaxed">`{plant.experience}`</p>
                               {plant.experienceCreatedAt && (
                                 <p className="text-xs text-gray-500 mt-2">
                                   {plant.experienceCreatedAt.toLocaleDateString('id-ID')}
