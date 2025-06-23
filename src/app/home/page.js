@@ -57,7 +57,11 @@ export default function Home() {
     <div className="bg-gray-50 text-black min-h-screen">
       {/* Header */}
       <header className="flex justify-between items-center bg-[#E5B961] p-4 sticky top-0 z-30 shadow-sm">
+<<<<<<< HEAD
         <Link href="/" className="flex items-center">
+=======
+        <Link href="/home" className="flex items-center">
+>>>>>>> fixingError10
           <Image
             src="/logo wefarm.png"
             alt="WeFarm Logo"

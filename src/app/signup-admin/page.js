@@ -6,7 +6,11 @@ import Link from "next/link";
 import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+<<<<<<< HEAD
 import { auth, db } from "../../../lib/firebase"; // pastikan ini sesuai path
+=======
+import { auth, db } from "../../../lib/firebase";
+>>>>>>> fixingError10
 
 export default function SignupPageAdmin() {
   const router = useRouter();

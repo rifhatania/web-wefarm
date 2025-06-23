@@ -124,7 +124,11 @@ export default function LoginPage() {
               {loading ? "Logging in..." : "Log In"}
             </button>
             <p className="text-sm mt-4">
+<<<<<<< HEAD
               Don't have an account?{" "}
+=======
+              Don`t have an account?{" "}
+>>>>>>> fixingError10
               <Link href="/signup" className="font-bold text-green-800">
                 Register
               </Link>
