@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../../../lib/firebase'; // sesuaikan dengan path Anda
 import { ArrowLeft } from 'react-feather';
@@ -13,6 +13,7 @@ export default function SettingsPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [passwordLoading, setPasswordLoading] = useState(false);
   const [user, setUser] = useState({
     name: '',
     email: '',
@@ -71,20 +72,82 @@ export default function SettingsPage() {
     setPasswordData(prev => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmitPassword = (e) => {
+  const handleSubmitPassword = async (e) => {
     e.preventDefault();
+    
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       alert('New password and confirm password do not match');
       return;
     }
-    // Add password change logic here
-    setShowPasswordModal(false);
-    setPasswordData({
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: ''
-    });
-    alert('Password changed successfully!');
+
+    if (passwordData.newPassword.length < 6) {
+      alert('New password should be at least 6 characters long');
+      return;
+    }
+
+    if (!currentUser) {
+      alert('No user is currently logged in');
+      return;
+    }
+
+    setPasswordLoading(true);
+
+    try {
+      // Create credential with current password for reauthentication
+      const credential = EmailAuthProvider.credential(
+        currentUser.email,
+        passwordData.currentPassword
+      );
+
+      console.log('Attempting to reauthenticate...');
+      // Reauthenticate user with current password
+      await reauthenticateWithCredential(currentUser, credential);
+      console.log('Reauthentication successful');
+
+      console.log('Updating password...');
+      // Update password in Firebase Authentication
+      await updatePassword(currentUser, passwordData.newPassword);
+      console.log('Password updated successfully in Firebase Auth');
+
+      // Optional: Remove password field from Firestore if it exists
+      try {
+        const userDocRef = doc(db, 'users', currentUser.uid);
+        await updateDoc(userDocRef, {
+          password: null, // Remove password field from Firestore
+          updatedAt: new Date(),
+        });
+        console.log('Removed password from Firestore document');
+      } catch (firestoreError) {
+        console.log('Note: Could not update Firestore document, but Auth password was changed');
+      }
+
+      // Reset form and close modal
+      setPasswordData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      });
+      setShowPasswordModal(false);
+      alert('Password changed successfully! Please use your new password for future logins.');
+
+    } catch (error) {
+      console.error('Error changing password:', error);
+      
+      // Handle specific error cases
+      if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        alert('Current password is incorrect. Please check and try again.');
+      } else if (error.code === 'auth/weak-password') {
+        alert('New password is too weak. Please choose a stronger password.');
+      } else if (error.code === 'auth/requires-recent-login') {
+        alert('For security reasons, please log out and log back in before changing your password');
+      } else if (error.code === 'auth/too-many-requests') {
+        alert('Too many failed attempts. Please try again later.');
+      } else {
+        alert('Error changing password: ' + error.message);
+      }
+    } finally {
+      setPasswordLoading(false);
+    }
   };
 
   const handleEditProfile = () => {
@@ -298,11 +361,12 @@ export default function SettingsPage() {
                     value={passwordData.currentPassword}
                     onChange={handlePasswordChange}
                     required
+                    disabled={passwordLoading}
                   />
                 </div>
                 <div>
                   <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                    New Password
+                    New Password (min. 6 characters)
                   </label>
                   <input
                     type="password"
@@ -311,6 +375,8 @@ export default function SettingsPage() {
                     value={passwordData.newPassword}
                     onChange={handlePasswordChange}
                     required
+                    minLength={6}
+                    disabled={passwordLoading}
                   />
                 </div>
                 <div>
@@ -324,22 +390,25 @@ export default function SettingsPage() {
                     value={passwordData.confirmPassword}
                     onChange={handlePasswordChange}
                     required
+                    disabled={passwordLoading}
                   />
                 </div>
               </div>
               <div className="flex justify-end space-x-3 mt-6">
                 <button
                   type="button"
-                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors disabled:opacity-50"
                   onClick={() => setShowPasswordModal(false)}
+                  disabled={passwordLoading}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#E5B961] text-white rounded-md hover:bg-amber-500 transition-colors"
+                  className="px-4 py-2 bg-[#E5B961] text-white rounded-md hover:bg-amber-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={passwordLoading}
                 >
-                  Change Password
+                  {passwordLoading ? 'Changing...' : 'Change Password'}
                 </button>
               </div>
             </form>

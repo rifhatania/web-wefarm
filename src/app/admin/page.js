@@ -256,7 +256,7 @@ function AdminPlantManagement() {
       alert('Setidaknya satu target harus diisi');
       return;
     }
-  
+
     setIsLoading(true);
 
     try {
@@ -465,16 +465,11 @@ function AdminPlantManagement() {
       </main>
 
       {/* Add Plant Modal */}
+      {/* Add Plant Modal */}
       {showAddModal && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50"
-          onClick={() => setShowAddModal(false)}
-        >
-          <div
-            className="bg-white rounded-xl p-6 w-full max-w-md mx-4 relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-xl w-full max-w-md max-h-[90vh] flex flex-col relative">
+            <div className="flex justify-between items-center p-6 border-b border-gray-200 flex-shrink-0">
               <h3 className="text-xl font-bold text-[#E1A73B]">Tambah Tanaman Baru</h3>
               <button
                 onClick={() => setShowAddModal(false)}
@@ -484,228 +479,225 @@ function AdminPlantManagement() {
               </button>
             </div>
 
-            <form onSubmit={addNewPlant} className="space-y-4">
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nama Tanaman</label>
-                <input
-                  type="text"
-                  value={plantName}
-                  onChange={(e) => setPlantName(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Durasi Tumbuh (bulan)</label>
-                <input
-                  type="number"
-                  value={growthDuration}
-                  onChange={(e) => setGrowthDuration(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  min="1"
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Gambar Tanaman</label>
-                <div className="mt-2 flex items-center">
+            <div className="flex-1 overflow-y-auto p-6">
+              <form onSubmit={addNewPlant} className="space-y-4">
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Nama Tanaman</label>
                   <input
-                    type="file"
-                    id="plantImage"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
+                    type="text"
+                    value={plantName}
+                    onChange={(e) => setPlantName(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    required
                   />
-                  <label
-                    htmlFor="plantImage"
-                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 cursor-pointer flex items-center gap-2"
-                  >
-                    <Upload className="w-4 h-4" />
-                    {selectedImage ? 'Ganti Gambar' : 'Unggah Gambar'}
-                  </label>
-                  {selectedImage && (
-                    <span className="ml-2 text-sm text-gray-600">
-                      {selectedImage.name.length > 20
-                        ? selectedImage.name.substring(0, 20) + '...'
-                        : selectedImage.name}
-                    </span>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Durasi Tumbuh (bulan)</label>
+                  <input
+                    type="number"
+                    value={growthDuration}
+                    onChange={(e) => setGrowthDuration(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    min="1"
+                    required
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Gambar Tanaman</label>
+                  <div className="mt-2 flex items-center">
+                    <input
+                      type="file"
+                      id="plantImage"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                    <label
+                      htmlFor="plantImage"
+                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 cursor-pointer flex items-center gap-2"
+                    >
+                      <Upload className="w-4 h-4" />
+                      {selectedImage ? 'Ganti Gambar' : 'Unggah Gambar'}
+                    </label>
+                    {selectedImage && (
+                      <span className="ml-2 text-sm text-gray-600">
+                        {selectedImage.name.length > 20
+                          ? selectedImage.name.substring(0, 20) + '...'
+                          : selectedImage.name}
+                      </span>
+                    )}
+                  </div>
+                  {imageUrl && (
+                    <div className="mt-2">
+                      <Image
+                        src={imageUrl}
+                        alt="Preview"
+                        width={100}
+                        height={100}
+                        className="rounded-md object-cover"
+                      />
+                    </div>
                   )}
                 </div>
-                {imageUrl && (
-                  <div className="mt-2">
-                    <Image
-                      src={imageUrl}
-                      alt="Preview"
-                      width={100}
-                      height={100}
-                      className="rounded-md object-cover"
-                    />
+
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Panduan (Guide)</label>
+                  <div className="space-y-2">
+                    {guides.map((guide, index) => (
+                      <div key={`guide-${index}`} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={guide}
+                          onChange={(e) => handleGuideChange(index, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+                          placeholder={`Panduan ${index + 1}`}
+                        />
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => removeGuide(index)}
+                            className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                          >
+                            -
+                          </button>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                )}
-              </div>
-
-
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Panduan (Guide)</label>
-                <div className="space-y-2">
-                  {guides.map((guide, index) => (
-                    <div key={`guide-${index}`} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={guide}
-                        onChange={(e) => handleGuideChange(index, e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
-                        placeholder={`Panduan ${index + 1}`}
-                      />
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => removeGuide(index)}
-                          className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                        >
-                          -
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                  <button
+                    type="button"
+                    onClick={addGuide}
+                    className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
+                  >
+                    + Tambah Panduan
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={addGuide}
-                  className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
-                >
-                  + Tambah Panduan
-                </button>
-              </div>
 
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Target Pertumbuhan</label>
-                <div className="space-y-2">
-                  {targets.map((target, index) => (
-                    <div key={index} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={target}
-                        onChange={(e) => handleTargetChange(index, e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
-                        placeholder={`Target ${index + 1}`}
-                        required={index === 0}
-                      />
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => removeTarget(index)}
-                          className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                        >
-                          -
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Target Pertumbuhan</label>
+                  <div className="space-y-2">
+                    {targets.map((target, index) => (
+                      <div key={index} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={target}
+                          onChange={(e) => handleTargetChange(index, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+                          placeholder={`Target ${index + 1}`}
+                          required={index === 0}
+                        />
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => removeTarget(index)}
+                            className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                          >
+                            -
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addTarget}
+                    className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
+                  >
+                    + Tambah Target
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={addTarget}
-                  className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
-                >
-                  + Tambah Target
-                </button>
-              </div>
 
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Target Harian (Daily)</label>
-                <div className="space-y-2">
-                  {dailies.map((daily, index) => (
-                    <div key={`daily-${index}`} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={daily}
-                        onChange={(e) => handleDailyChange(index, e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
-                        placeholder={`Aktivitas harian ${index + 1}`}
-                      />
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => removeDaily(index)}
-                          className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                        >
-                          -
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Target Harian (Daily)</label>
+                  <div className="space-y-2">
+                    {dailies.map((daily, index) => (
+                      <div key={`daily-${index}`} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={daily}
+                          onChange={(e) => handleDailyChange(index, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+                          placeholder={`Aktivitas harian ${index + 1}`}
+                        />
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => removeDaily(index)}
+                            className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                          >
+                            -
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addDaily}
+                    className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
+                  >
+                    + Tambah Aktivitas Harian
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={addDaily}
-                  className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
-                >
-                  + Tambah Aktivitas Harian
-                </button>
-              </div>
 
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Produk yang Dibutuhkan</label>
-                <div className="space-y-2">
-                  {products.map((product, index) => (
-                    <div key={`product-${index}`} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={product}
-                        onChange={(e) => handleProductChange(index, e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
-                        placeholder={`Produk ${index + 1} (contoh: pot tanaman)`}
-                      />
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => removeProduct(index)}
-                          className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                        >
-                          -
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Produk yang Dibutuhkan</label>
+                  <div className="space-y-2">
+                    {products.map((product, index) => (
+                      <div key={`product-${index}`} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={product}
+                          onChange={(e) => handleProductChange(index, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+                          placeholder={`Produk ${index + 1} (contoh: pot tanaman)`}
+                        />
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => removeProduct(index)}
+                            className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                          >
+                            -
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addProduct}
+                    className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
+                  >
+                    + Tambah Produk
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={addProduct}
-                  className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
-                >
-                  + Tambah Produk
-                </button>
-              </div>
 
-              <button
-                type="submit"
-                disabled={isLoading || uploadLoading}
-                className={`w-full py-2 rounded-md font-medium ${isLoading || uploadLoading
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-[#E1A73B] text-white hover:bg-amber-600'
-                  }`}
-              >
-                {isLoading ? 'Menambahkan...' : uploadLoading ? 'Mengupload Gambar...' : 'Tambah Tanaman'}
-              </button>
-            </form>
+                <div className="pt-4 border-t border-gray-200">
+                  <button
+                    type="submit"
+                    disabled={isLoading || uploadLoading}
+                    className={`w-full py-2 rounded-md font-medium ${isLoading || uploadLoading
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-[#E1A73B] text-white hover:bg-amber-600'
+                      }`}
+                  >
+                    {isLoading ? 'Menambahkan...' : uploadLoading ? 'Mengupload Gambar...' : 'Tambah Tanaman'}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}
 
       {/* Edit Plant Modal */}
       {showEditModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 overflow-y-auto"
-          onClick={() => setShowEditModal(false)}
-        >
-          <div
-            className="bg-white rounded-xl p-6 w-full max-w-md mx-4 my-8"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-xl w-full max-w-md max-h-[90vh] flex flex-col relative">
+            <div className="flex justify-between items-center p-6 border-b border-gray-200 flex-shrink-0">
               <h3 className="text-xl font-bold text-[#E1A73B]">Edit Data Tanaman</h3>
               <button
                 onClick={() => setShowEditModal(false)}
@@ -715,215 +707,219 @@ function AdminPlantManagement() {
               </button>
             </div>
 
-            <form onSubmit={saveEditedPlant} className="space-y-4">
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nama Tanaman</label>
-                <input
-                  type="text"
-                  value={plantName}
-                  onChange={(e) => setPlantName(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Durasi Tumbuh (bulan)</label>
-                <input
-                  type="number"
-                  value={growthDuration}
-                  onChange={(e) => setGrowthDuration(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  min="1"
-                  required
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Gambar Tanaman</label>
-                <div className="mt-2 flex items-center">
+            <div className="flex-1 overflow-y-auto p-6">
+              <form onSubmit={saveEditedPlant} className="space-y-4">
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Nama Tanaman</label>
                   <input
-                    type="file"
-                    id="editPlantImage"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
+                    type="text"
+                    value={plantName}
+                    onChange={(e) => setPlantName(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    required
                   />
-                  <label
-                    htmlFor="editPlantImage"
-                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 cursor-pointer flex items-center gap-2"
-                  >
-                    <Upload className="w-4 h-4" />
-                    {selectedImage ? 'Ganti Gambar' : 'Unggah Gambar'}
-                  </label>
-                  {selectedImage && (
-                    <span className="ml-2 text-sm text-gray-600">
-                      {selectedImage.name.length > 20
-                        ? selectedImage.name.substring(0, 20) + '...'
-                        : selectedImage.name}
-                    </span>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Durasi Tumbuh (bulan)</label>
+                  <input
+                    type="number"
+                    value={growthDuration}
+                    onChange={(e) => setGrowthDuration(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    min="1"
+                    required
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Gambar Tanaman</label>
+                  <div className="mt-2 flex items-center">
+                    <input
+                      type="file"
+                      id="editPlantImage"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                    <label
+                      htmlFor="editPlantImage"
+                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 cursor-pointer flex items-center gap-2"
+                    >
+                      <Upload className="w-4 h-4" />
+                      {selectedImage ? 'Ganti Gambar' : 'Unggah Gambar'}
+                    </label>
+                    {selectedImage && (
+                      <span className="ml-2 text-sm text-gray-600">
+                        {selectedImage.name.length > 20
+                          ? selectedImage.name.substring(0, 20) + '...'
+                          : selectedImage.name}
+                      </span>
+                    )}
+                  </div>
+                  {imageUrl && (
+                    <div className="mt-2">
+                      <Image
+                        src={imageUrl}
+                        alt="Preview"
+                        width={100}
+                        height={100}
+                        className="rounded-md object-cover"
+                      />
+                    </div>
                   )}
                 </div>
-                {imageUrl && (
-                  <div className="mt-2">
-                    <Image
-                      src={imageUrl}
-                      alt="Preview"
-                      width={100}
-                      height={100}
-                      className="rounded-md object-cover"
-                    />
+
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Panduan (Guide)</label>
+                  <div className="space-y-2">
+                    {guides.map((guide, index) => (
+                      <div key={`guide-${index}`} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={guide}
+                          onChange={(e) => handleGuideChange(index, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+                          placeholder={`Panduan ${index + 1}`}
+                        />
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => removeGuide(index)}
+                            className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                          >
+                            -
+                          </button>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                )}
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Panduan (Guide)</label>
-                <div className="space-y-2">
-                  {guides.map((guide, index) => (
-                    <div key={`guide-${index}`} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={guide}
-                        onChange={(e) => handleGuideChange(index, e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
-                        placeholder={`Panduan ${index + 1}`}
-                      />
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => removeGuide(index)}
-                          className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                        >
-                          -
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                  <button
+                    type="button"
+                    onClick={addGuide}
+                    className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
+                  >
+                    + Tambah Panduan
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={addGuide}
-                  className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
-                >
-                  + Tambah Panduan
-                </button>
-              </div>
 
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Target Pertumbuhan</label>
-                <div className="space-y-2">
-                  {targets.map((target, index) => (
-                    <div key={index} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={target}
-                        onChange={(e) => handleTargetChange(index, e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
-                        required={index === 0}
-                      />
-                      {targets.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeTarget(index)}
-                          className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                        >
-                          -
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Target Pertumbuhan</label>
+                  <div className="space-y-2">
+                    {targets.map((target, index) => (
+                      <div key={index} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={target}
+                          onChange={(e) => handleTargetChange(index, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+                          required={index === 0}
+                        />
+                        {targets.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeTarget(index)}
+                            className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                          >
+                            -
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addTarget}
+                    className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
+                  >
+                    + Tambah Target
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={addTarget}
-                  className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
-                >
-                  + Tambah Target
-                </button>
-              </div>
 
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Target Harian (Daily)</label>
-                <div className="space-y-2">
-                  {dailies.map((daily, index) => (
-                    <div key={`daily-${index}`} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={daily}
-                        onChange={(e) => handleDailyChange(index, e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
-                        placeholder={`Aktivitas harian ${index + 1}`}
-                      />
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => removeDaily(index)}
-                          className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                        >
-                          -
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Target Harian (Daily)</label>
+                  <div className="space-y-2">
+                    {dailies.map((daily, index) => (
+                      <div key={`daily-${index}`} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={daily}
+                          onChange={(e) => handleDailyChange(index, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+                          placeholder={`Aktivitas harian ${index + 1}`}
+                        />
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => removeDaily(index)}
+                            className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                          >
+                            -
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addDaily}
+                    className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
+                  >
+                    + Tambah Aktivitas Harian
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={addDaily}
-                  className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
-                >
-                  + Tambah Aktivitas Harian
-                </button>
-              </div>
 
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Produk yang Dibutuhkan</label>
-                <div className="space-y-2">
-                  {products.map((product, index) => (
-                    <div key={`product-${index}`} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={product}
-                        onChange={(e) => handleProductChange(index, e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
-                        placeholder={`Produk ${index + 1} (contoh: pot tanaman)`}
-                      />
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => removeProduct(index)}
-                          className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                        >
-                          -
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Produk yang Dibutuhkan</label>
+                  <div className="space-y-2">
+                    {products.map((product, index) => (
+                      <div key={`product-${index}`} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={product}
+                          onChange={(e) => handleProductChange(index, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+                          placeholder={`Produk ${index + 1} (contoh: pot tanaman)`}
+                        />
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => removeProduct(index)}
+                            className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                          >
+                            -
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addProduct}
+                    className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
+                  >
+                    + Tambah Produk
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={addProduct}
-                  className="mt-2 px-3 py-1 bg-[#E1A73B] text-white rounded-md text-sm hover:bg-amber-600"
-                >
-                  + Tambah Produk
-                </button>
-              </div>
 
-              <button
-                type="submit"
-                disabled={isLoading || uploadLoading}
-                className={`w-full py-2 rounded-md font-medium ${isLoading || uploadLoading
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-[#E1A73B] text-white hover:bg-amber-600'
-                  }`}
-              >
-                {isLoading ? 'Menyimpan...' : uploadLoading ? 'Mengupload Gambar...' : 'Simpan Perubahan'}
-              </button>
-            </form>
+                <div className="pt-4 border-t border-gray-200">
+                  <button
+                    type="submit"
+                    disabled={isLoading || uploadLoading}
+                    className={`w-full py-2 rounded-md font-medium ${isLoading || uploadLoading
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-[#E1A73B] text-white hover:bg-amber-600'
+                      }`}
+                  >
+                    {isLoading ? 'Menyimpan...' : uploadLoading ? 'Mengupload Gambar...' : 'Simpan Perubahan'}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}
-
+      
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div
