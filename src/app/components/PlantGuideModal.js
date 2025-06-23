@@ -306,7 +306,11 @@ export default function PlantGuideModal({ plantName, onClose }) {
                           </span>
                         </div>
                       </div>
+<<<<<<< HEAD
                       <div className="text-gray-600 text-sm italic">"{exp.experience}"</div>
+=======
+                      <div className="text-gray-600 text-sm italic">`{exp.experience}`</div>
+>>>>>>> fixingError10
                     </div>
                   ))
                 ) : (
